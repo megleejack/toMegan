@@ -1,0 +1,21 @@
+    def get_consensus_score(self, bindingsites=None):
+        inputFile = open(self.f, 'r')
+        fh = inputFile.readlines()
+        transcriptBindingFact = []
+        q = ''
+        for lines in fh:
+             if lines.startswith('>'):
+                q = lines
+             else:
+                transcriptBindingFact += lines.split("\n")
+        frequency_matrix = np.zeros((4, len(transcriptBindingFact[0])), dtype=np.int)
+        base2index = {'A': 0, 'C': 1, 'G': 2, 'T': 3}
+        for dna in transcriptBindingFact:
+            for index, base in enumerate(dna):
+                frequency_matrix[base2index[base]][index] += 1
+        score = np.amax(frequency_matrix, axis=0)
+        add = 0
+        for val in score:
+            add += val
+        print(add)
+        return score
